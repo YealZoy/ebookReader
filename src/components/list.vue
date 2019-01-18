@@ -2,18 +2,15 @@
   <div class="container">
     <div class="row-fluid">
       <div class="span12">
-        <input class="input-medium search-query" type="text" /> <button type="submit" class="btn">查找</button>
+        <div class="head" v-on:click="goback"><img :src="headimgurl" /></div>
+        <input class="input-medium search-query" type="text" v-model="bname" />
+        <button class="btn" v-on:click="search">查找</button>
       </div>
     </div>
     <ul class="thumbnails">
-      <li class="span4">
-        <div class="thumbnail">
-          <img alt="300x200" src="/static/book1.jpg" />
-        </div>
-      </li>
       <li v-for="item in list" class="span4">
-        <div class="thumbnail">
-          <img alt="300x200" :src="item" />
+        <div class="thumbnail" v-on:click="read(item)">
+          <img alt="300x200" :src="item.coverimg" />
         </div>
       </li>
     </ul>
@@ -25,51 +22,127 @@
     name:'list',
     data: function(){
       return {
-        list: [
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-          '/static/book1.jpg',
-        ]
+        uid: this.$route.params.uid,
+        bname:'',
+        headimgurl: this.$route.params.headimgurl !== null ? 'http://ebookreader.zhengyuyan.com/' + this.$route.params.headimgurl : 'static/book1.jpg',
+        list: []
+      }
+    },
+    mounted: function() {
+      console.log(this.$route.params.headimgurl == null);
+      var _this = this;
+      console.log(this.$route.params.uid);
+      this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid)
+        .then(function (response) {
+          console.log(response.data.data);
+          var data = response.data.data;
+          if(data){
+            for(var i = 0;i < data.length; i++){
+              if(data[i].coverimg == null || data[i].coverimg == ''){
+                data[i].coverimg = 'static/book1.jpg';
+
+              }else{
+                data[i].coverimg = 'http://ebookreader.zhengyuyan.com' + data[i].coverimg;
+              }
+              _this.list.push(data[i]);
+            }
+          }
+
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    methods: {
+
+      search: function(){
+        var _this = this;
+        console.log(this.bname);
+        this.$axios.get('http://ebookreader.zhengyuyan.com/listbook', {
+          uid: this.uid,
+          bname: this.bname
+        })
+          .then(function (response) {
+            console.log(response.data.data);
+            var data = response.data.data;
+            if(data){
+              _this.list = [];
+              for(var i = 0;i < data.length; i++){
+                if(data[i].coverimg == null || data[i].coverimg == ''){
+                  data[i].coverimg = 'static/book1.jpg';
+                  _this.list.push(data[i]);
+                }
+              }
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      read: function(item){
+        var _this = this;
+        console.log({
+          bid: item.bid,
+          uid: _this.uid,
+          chapter: item.chapter,
+          page: item.page
+        });
+        this.$router.push({
+          name: 'read',
+          params: {
+            bid: item.bid,
+            uid: _this.uid,
+            chapter: item.chapter,
+            page: item.page,
+            bookurl: item.bookurl,
+            headimgurl: _this.$route.params.headimgurl
+          }
+        })
+      },
+      goback: function(){
+        this.$router.push('/');
       }
     },
     created(){
 
-      console.log(this);
-      var _this = this;
-      window.onscroll = function(){
-
-        //变量scrollTop是滚动条滚动时，距离顶部的距离
-        var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
-        //变量windowHeight是可视区的高度
-        var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
-        //变量scrollHeight是滚动条的总高度
-        var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
-        //滚动条到底部的条件
-        if(scrollTop+windowHeight==scrollHeight){
-          //写后台加载数据的函数
-          for(var i = 0; i < 4; i++){
-            _this.list.push('/static/book1.jpg');
-          }
-
-        }
-      }
+//      console.log(this);
+//      var _this = this;
+//      window.onscroll = function(){
+//
+//        //变量scrollTop是滚动条滚动时，距离顶部的距离
+//        var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+//        //变量windowHeight是可视区的高度
+//        var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+//        //变量scrollHeight是滚动条的总高度
+//        var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+//        //滚动条到底部的条件
+//        if(scrollTop+windowHeight==scrollHeight){
+//          //写后台加载数据的函数
+//          for(var i = 0; i < 4; i++){
+//            _this.list.push('/static/book1.jpg');
+//          }
+//
+//        }
+      //}
     }
   }
 </script>
 
 <style scoped>
+  .head{
+    width: 33px;
+    height: 33px;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 11px;
+  }
+  .head img{
+    width: 100%;
+    height: 100px;
+  }
   .container {
      padding-right: 0;
      padding-left: 0;
@@ -82,7 +155,7 @@
     border-bottom: 1px solid #2c3e50;
   }
   .search-query{
-    width: 80%;
+    width: 67%;
   }
   .thumbnails {
     list-style: none;
