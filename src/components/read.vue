@@ -204,7 +204,7 @@ export default {
         }
 
         _this.$axios.defaults.headers.common['token'] = _this.token
-        this.$axios.post('/api/addrecord', {
+        this.$axios.post('http://ebookreader.zhengyuyan.com/addrecord', {
           bid: _this.bid,
           uid: _this.uid,
           chapter: _this.href,

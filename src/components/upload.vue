@@ -96,7 +96,7 @@
       },
       upload: function(){
         var _this = this;
-        this.$axios.post('/api/addbook', {
+        this.$axios.post('http://ebookreader.zhengyuyan.com/addbook', {
           bname: this.bname,
           author: this.author,
           publishdate:this.publishdate,

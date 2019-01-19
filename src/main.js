@@ -10,7 +10,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
-axios.defaults.headers.common['Content-Type'] = 'application/json'
+//axios.defaults.headers.common['Content-Type'] = 'application/json'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

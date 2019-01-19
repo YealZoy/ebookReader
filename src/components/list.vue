@@ -35,7 +35,7 @@
       var _this = this;
       console.log(_this.token);
       _this.$axios.defaults.headers.common['token'] = _this.token
-      this.$axios.get('/api/listbook?uid=' + _this.uid)
+      this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid)
         .then(function (response) {
           console.log(response.data.data);
           var data = response.data.data;
@@ -62,7 +62,7 @@
         var _this = this;
         console.log(this.bname);
         _this.$axios.defaults.headers.common['token'] = _this.token
-        this.$axios.get('/api/listbook', {
+        this.$axios.get('http://ebookreader.zhengyuyan.com/listbook', {
           uid: this.uid,
           bname: this.bname
         })
