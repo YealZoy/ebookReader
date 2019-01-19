@@ -216,7 +216,8 @@ export default {
               name:'list',
               params:{
                 uid: _this.uid,
-                headimgurl: _this.headimgurl
+                headimgurl: _this.headimgurl,
+                token: _this.token
               }
             });
           })
