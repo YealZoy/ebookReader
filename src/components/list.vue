@@ -18,6 +18,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default{
     name:'list',
     data: function(){
@@ -25,14 +26,16 @@
         uid: this.$route.params.uid,
         bname:'',
         headimgurl: this.$route.params.headimgurl !== null ? 'http://ebookreader.zhengyuyan.com/' + this.$route.params.headimgurl : 'static/book1.jpg',
-        list: []
+        list: [],
+        token:this.$route.params.token
       }
     },
     mounted: function() {
       console.log(this.$route.params.headimgurl == null);
       var _this = this;
-      console.log(this.$route.params.uid);
-      this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid)
+      console.log(_this.token);
+      _this.$axios.defaults.headers.common['token'] = _this.token
+      this.$axios.get('/api/listbook?uid=' + _this.uid)
         .then(function (response) {
           console.log(response.data.data);
           var data = response.data.data;
@@ -58,7 +61,8 @@
       search: function(){
         var _this = this;
         console.log(this.bname);
-        this.$axios.get('http://ebookreader.zhengyuyan.com/listbook', {
+        _this.$axios.defaults.headers.common['token'] = _this.token
+        this.$axios.get('/api/listbook', {
           uid: this.uid,
           bname: this.bname
         })
@@ -96,7 +100,8 @@
             chapter: item.chapter,
             page: item.page,
             bookurl: item.bookurl,
-            headimgurl: _this.$route.params.headimgurl
+            headimgurl: _this.$route.params.headimgurl,
+            token: _this.token
           }
         })
       },

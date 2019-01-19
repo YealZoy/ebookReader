@@ -33,7 +33,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -60,7 +59,8 @@
                 name: 'list',
                 params:{
                   uid: response.data.data.user.uid,
-                  headimgurl: response.data.data.user.headimgurl
+                  headimgurl: response.data.data.user.headimgurl,
+                  token:response.data.data.token
                 }
               });
             }

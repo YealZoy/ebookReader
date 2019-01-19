@@ -91,7 +91,8 @@ export default {
           chapter: this.$route.params.chapter,
           page: this.$route.params.page,
           bookurl: this.$route.params.bookurl,
-          headimgurl: this.$route.params.headimgurl
+          headimgurl: this.$route.params.headimgurl,
+          token: this.$route.params.token
         }
     },
     methods: {
@@ -201,7 +202,9 @@ export default {
           _this.href = this.chapter
           _this.currentPage = this.page
         }
-        this.$axios.post('http://ebookreader.zhengyuyan.com/addrecord', {
+
+        _this.$axios.defaults.headers.common['token'] = _this.token
+        this.$axios.post('/api/addrecord', {
           bid: _this.bid,
           uid: _this.uid,
           chapter: _this.href,
