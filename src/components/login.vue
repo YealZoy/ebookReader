@@ -25,6 +25,7 @@
                 </div>
                 <button class="btn" v-on:click="login">Sign in!</button>
                 <button class="btn" v-on:click="register">Sign up!</button>
+                <a target="_self" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx578d3b84be4aa096&redirect_uri=http%3A%2F%2Febookreader.zhengyuyan.com%2FcallBack&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect">weixin</a>
                 </div>
               </div>
             </div>
@@ -54,6 +55,9 @@
           .then(function (response) {
             if(response.data && response.data.code && response.data.code == 1){
 
+              localStorage.uid = response.data.data.user.uid;
+              localStorage.headimgurl=response.data.data.user.headimgurl;
+              localStorage.token=response.data.data.token;
               _this.$axios.defaults.headers.common['token'] = response.data.data.token
               _this.$router.push({
                 name: 'list',

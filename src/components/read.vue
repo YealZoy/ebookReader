@@ -86,13 +86,13 @@ export default {
           // 图书是否处于可用状态
           bookAvailable: true,
           navigation: {},
-          bid: this.$route.params.bid,
-          uid: this.$route.params.uid,
-          chapter: this.$route.params.chapter,
-          page: this.$route.params.page,
-          bookurl: this.$route.params.bookurl,
-          headimgurl: this.$route.params.headimgurl,
-          token: this.$route.params.token
+          bid: localStorage.bid,
+          uid: localStorage.uid,
+          chapter: localStorage.chapter,
+          page: localStorage.page,
+          bookurl: localStorage.bookurl,
+          headimgurl: localStorage.headimgurl,
+          token: localStorage.token
         }
     },
     methods: {

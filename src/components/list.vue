@@ -23,15 +23,14 @@
     name:'list',
     data: function(){
       return {
-        uid: this.$route.params.uid,
+        uid: localStorage.uid,
         bname:'',
-        headimgurl: this.$route.params.headimgurl !== null ? 'http://ebookreader.zhengyuyan.com/' + this.$route.params.headimgurl : 'static/book1.jpg',
+        headimgurl: localStorage.headimgurl !== 'null' ? 'http://ebookreader.zhengyuyan.com/' + localStorage.headimgurl : 'static/book1.jpg',
         list: [],
-        token:this.$route.params.token
+        token:localStorage.token
       }
     },
     mounted: function() {
-      console.log(this.$route.params.headimgurl == null);
       var _this = this;
       console.log(_this.token);
       _this.$axios.defaults.headers.common['token'] = _this.token
@@ -62,22 +61,22 @@
         var _this = this;
         console.log(this.bname);
         _this.$axios.defaults.headers.common['token'] = _this.token
-        this.$axios.get('http://ebookreader.zhengyuyan.com/listbook', {
-          uid: this.uid,
-          bname: this.bname
-        })
+        this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid + '&bname=' + this.bname)
           .then(function (response) {
             console.log(response.data.data);
+             _this.list = []; 
             var data = response.data.data;
-            if(data){
-              _this.list = [];
-              for(var i = 0;i < data.length; i++){
-                if(data[i].coverimg == null || data[i].coverimg == ''){
-                  data[i].coverimg = 'static/book1.jpg';
-                  _this.list.push(data[i]);
-                }
+          if(data){
+            for(var i = 0;i < data.length; i++){
+              if(data[i].coverimg == null || data[i].coverimg == ''){
+                data[i].coverimg = 'static/book1.jpg';
+
+              }else{
+                data[i].coverimg = 'http://ebookreader.zhengyuyan.com' + data[i].coverimg;
               }
+              _this.list.push(data[i]);
             }
+          }
 
           })
           .catch(function (error) {
@@ -92,16 +91,17 @@
           chapter: item.chapter,
           page: item.page
         });
+        localStorage.bid = item.bid;
+        localStorage.chapter =item.chapter;
+        localStorage.page = item.chapter;
+        localStorage.bookurl = item.bookurl;
         this.$router.push({
           name: 'read',
           params: {
             bid: item.bid,
-            uid: _this.uid,
             chapter: item.chapter,
             page: item.page,
             bookurl: item.bookurl,
-            headimgurl: _this.$route.params.headimgurl,
-            token: _this.token
           }
         })
       },
