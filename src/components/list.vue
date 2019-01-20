@@ -23,7 +23,7 @@
     name:'list',
     data: function(){
       return {
-        uid: localStorage.uid,
+        uid: localStorage.uid || this.$route.query.uid,
         bname:'',
         headimgurl: localStorage.headimgurl !== 'null' ? 'http://ebookreader.zhengyuyan.com/' + localStorage.headimgurl : 'static/book1.jpg',
         list: [],
