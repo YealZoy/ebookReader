@@ -25,7 +25,7 @@
       return {
         uid: localStorage.uid || this.$route.query.uid,
         bname:'',
-        headimgurl: localStorage.headimgurl !== 'null' ? 'http://ebookreader.zhengyuyan.com/' + localStorage.headimgurl : 'static/book1.jpg',
+        headimgurl: localStorage.headimgurl || this.$route.query.headimgurl,
         list: [],
         token:localStorage.token || this.$route.query.token
       }
@@ -35,6 +35,8 @@
       console.log(_this.token);
       alert(this.$route.query.token);
       localStorage.token = _this.token;
+      localStorage.uid = _this.uid;
+      localStorage.headimgurl = _this.headimgurl;
       _this.$axios.defaults.headers.common['token'] = _this.token
       this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid)
         .then(function (response) {
