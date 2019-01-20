@@ -27,12 +27,14 @@
         bname:'',
         headimgurl: localStorage.headimgurl !== 'null' ? 'http://ebookreader.zhengyuyan.com/' + localStorage.headimgurl : 'static/book1.jpg',
         list: [],
-        token:localStorage.token
+        token:localStorage.token || this.$route.query.token
       }
     },
     mounted: function() {
       var _this = this;
       console.log(_this.token);
+      alert(this.$route.query.token);
+      localStorage.token = _this.token;
       _this.$axios.defaults.headers.common['token'] = _this.token
       this.$axios.get('http://ebookreader.zhengyuyan.com/listbook?uid=' + _this.uid)
         .then(function (response) {
