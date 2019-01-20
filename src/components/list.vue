@@ -25,13 +25,24 @@
       return {
         uid: localStorage.uid || this.$route.query.uid,
         bname:'',
-        headimgurl: localStorage.headimgurl || this.$route.query.headimgurl,
+        headimgurl: '',
         list: [],
         token:localStorage.token || this.$route.query.token
       }
     },
     mounted: function() {
       var _this = this;
+
+      //判断头像
+
+      if(this.$route.query.headimgurl){
+        _this.headimgurl = this.$route.query.headimgurl;
+      }else if(localStorage.headimgurl !== 'null' && localStorage.headimgurl !== ''){
+        _this.headimgurl = 'http://ebookreader.zhengyuyan.com/listbook' + localStorage.headimgurl
+      }else{
+        _this.headimgurl = 'static/book1.jpg';
+      }
+
       console.log(_this.token);
       alert(this.$route.query.token);
       localStorage.token = _this.token;
@@ -150,7 +161,7 @@
   }
   .head img{
     width: 100%;
-    height: 100px;
+    height: 100%;
   }
   .container {
      padding-right: 0;
